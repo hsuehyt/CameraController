@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AdvancedEditorLikeCameraControl : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     public float panSpeed = 0.5f;
     public float zoomSpeed = 0.2f; // Adjusted for smoother zoom control
