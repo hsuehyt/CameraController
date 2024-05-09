@@ -1,5 +1,3 @@
-Certainly! Below is a README template for the `CameraController` script suitable for a GitHub repository. This README outlines the functionality of the script and provides instructions on how to implement it into a Unity project.
-
 ### README.md for CameraController
 
 ---
