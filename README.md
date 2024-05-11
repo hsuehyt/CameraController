@@ -1,44 +1,54 @@
-# CameraController
+# Camera Controller for Unity
 
----
+## Overview
 
-#### Overview
-`CameraController` is a versatile Unity3D script designed to provide intuitive and customizable camera controls similar to those found in Unity's Editor. It allows users to pan, zoom, and rotate the camera during runtime, enhancing the usability of any scene. Additionally, the script includes a feature to reset the camera to its original position and orientation.
+The `CameraController` script provides versatile camera control functionalities for Unity applications, allowing the camera to pan, zoom, and orbit around a designated GameObject named "Sphere". This script is designed to be attached to a camera object in a Unity scene to enable dynamic and intuitive camera movements through mouse inputs.
 
-#### Features
-- **Zoom:** Alt + Right Mouse Button + Move Mouse Vertically
-- **Pan:** Alt + Middle Mouse Button + Move Mouse
-- **Orbit/Tumble:** Alt + Left Mouse Button + Move Mouse
-- **Reset Camera:** Press 'F' to reset to the default camera position and orientation
+## Features
 
-#### Requirements
-- Unity 2019.4 LTS or later is recommended to ensure full compatibility.
+- **Zoom**: Adjust the camera's distance relative to the "Sphere" using the right mouse button.
+- **Pan**: Move the camera parallel to its current viewing plane using the middle mouse button.
+- **Orbit/Tilt**: Rotate the camera around the "Sphere", allowing both horizontal orbiting and vertical tilting using the left mouse button.
 
-#### Installation
-1. **Create the Script:**
-   - Navigate to the Assets folder in Unity's Project pane.
-   - Right-click and select Create > C# Script.
-   - Name the script `CameraController`.
-   - Open the script in your preferred code editor.
+## Setup
 
-2. **Script Setup:**
-   - Copy and paste the provided script code into the `CameraController` script file.
+### Requirements
 
-3. **Attach to Camera:**
-   - Drag the script onto the camera object in your scene that you wish to control.
+- Unity 2019.4 LTS or later
+- A scene with at least one camera and a GameObject named "Sphere"
 
-4. **Configure Script Parameters:**
-   - With the camera selected, adjust the script parameters in the Inspector to suit your needs. Parameters include `panSpeed`, `zoomSpeed`, `rotationSpeed`, as well as initial `defaultPosition` and `defaultRotation`.
+### Installation
 
-#### Usage
-After setup, enter Play mode in Unity to interact with the camera:
-- **Zoom:** Hold Alt and the right mouse button, then move the mouse vertically.
-- **Pan:** Hold Alt and the middle mouse button, then move the mouse.
-- **Orbit/Tumble:** Hold Alt and the left mouse button, then move the mouse.
-- **Reset:** Simply press the 'F' key to reset the camera to its default settings.
+1. **Create or Open Your Unity Project**:
+   - Launch Unity and either create a new project or open an existing one where you intend to use this camera control.
 
-#### Contributing
-Contributions to enhance `CameraController`, fix issues, or improve documentation are warmly welcomed. Please feel free to fork the repository, make your changes, and submit a pull request.
+2. **Add the Script**:
+   - Create a new script in Unity named `CameraController`.
+   - Copy the provided `CameraController` code into this script using Unity's script editor or your preferred text editor.
 
-#### License
-This project is licensed under the MIT License - see the LICENSE file in the source repository for more details.
+3. **Prepare the Scene**:
+   - Ensure your scene has a camera object. This will typically be the Main Camera.
+   - Add a GameObject to your scene and name it "Sphere". This object will serve as the pivot point around which the camera moves.
+
+4. **Attach the Script**:
+   - Drag the `CameraController` script onto your Main Camera in the scene to attach it as a component.
+
+5. **Configure the Script** (Optional):
+   - Select the camera in your scene hierarchy.
+   - In the Inspector panel, you will see the `CameraController` component with several adjustable parameters such as `panSpeed`, `zoomSpeed`, and `rotationSpeed`. Adjust these parameters as needed to fine-tune the camera's responsiveness.
+
+## Usage
+
+- **Activate Camera Controls**:
+  - Hold the **Left Alt** key to activate the camera controls.
+- **Camera Movements**:
+  - **Zoom**: Click and hold the right mouse button, then move the mouse forward or backward.
+  - **Pan**: Click and hold the middle mouse button, then move the mouse in any direction.
+  - **Orbit/Tilt**: Click and hold the left mouse button, then move the mouse to orbit horizontally or tilt vertically.
+
+- **Reset Camera**:
+  - Press the **F** key to reset the camera to its default position and orientation.
+
+## Support
+
+For support, feature requests, or bug reports, please open an issue in the GitHub repository linked to this project or contact the developer directly through [Developer Contact Information].
