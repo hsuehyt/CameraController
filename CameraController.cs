@@ -9,10 +9,12 @@ public class CameraController : MonoBehaviour
     public Quaternion defaultRotation;
 
     private Camera cam;
+    private GameObject sphere; // Reference to the Sphere GameObject
 
     void Start()
     {
-        cam = Camera.main;  // Get the main camera
+        cam = Camera.main; // Get the main camera
+        sphere = GameObject.Find("Sphere"); // Find the Sphere GameObject in the scene
         SetDefaults();
     }
 
@@ -49,24 +51,35 @@ public class CameraController : MonoBehaviour
         }
         if (Input.GetMouseButton(0)) // Left Mouse Button
         {
-            // Tumbling/Orbiting
+            // Tumbling/Orbiting around "Sphere"
             float h = Input.GetAxis("Mouse X") * rotationSpeed;
             float v = Input.GetAxis("Mouse Y") * rotationSpeed;
-            cam.transform.RotateAround(cam.transform.position, Vector3.up, h);
-            cam.transform.RotateAround(cam.transform.position, cam.transform.right, -v);
+
+            if (sphere != null)
+            {
+                // Rotate around the Sphere's position horizontally and vertically
+                cam.transform.RotateAround(sphere.transform.position, Vector3.up, h);
+                cam.transform.RotateAround(sphere.transform.position, cam.transform.right, -v);
+            }
         }
     }
 
     void ResetCamera()
     {
-        cam.transform.position = defaultPosition;
-        cam.transform.rotation = defaultRotation;
+        if (sphere != null)
+        {
+            cam.transform.position = defaultPosition; // Reset to default position
+            cam.transform.rotation = defaultRotation; // Reset to default rotation
+        }
         Debug.Log("Camera reset to default position and rotation.");
     }
 
     void SetDefaults()
     {
-        defaultPosition = cam.transform.position;  // Save the initial position as default
-        defaultRotation = cam.transform.rotation;  // Save the initial rotation as default
+        if (sphere != null)
+        {
+            defaultPosition = cam.transform.position; // Save the initial position as default
+            defaultRotation = cam.transform.rotation; // Save the initial rotation as default
+        }
     }
 }
