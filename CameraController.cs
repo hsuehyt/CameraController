@@ -8,13 +8,13 @@ public class CameraController : MonoBehaviour
     public Vector3 defaultPosition;
     public Quaternion defaultRotation;
 
-    private Camera cam;
-    private GameObject sphere; // Reference to the Sphere GameObject
+    private GameObject userPoint; // Reference to the UserPoint GameObject
+    private GameObject cameraAim; // Reference to the cameraAim GameObject
 
     void Start()
     {
-        cam = Camera.main; // Get the main camera
-        sphere = GameObject.Find("Sphere"); // Find the Sphere GameObject in the scene
+        userPoint = GameObject.Find("UserPoint"); // Find the UserPoint GameObject in the scene
+        cameraAim = GameObject.Find("cameraAim"); // Find the cameraAim GameObject in the scene
         SetDefaults();
     }
 
@@ -37,49 +37,49 @@ public class CameraController : MonoBehaviour
         {
             // Zooming
             float zoomChange = Input.GetAxis("Mouse Y") * zoomSpeed;
-            cam.transform.Translate(0, 0, zoomChange, Space.Self);
+            userPoint.transform.Translate(0, 0, zoomChange, Space.Self);
         }
         if (Input.GetMouseButton(2)) // Middle Mouse Button
         {
             // Panning
-            Vector3 right = cam.transform.right;
-            Vector3 up = cam.transform.up;
+            Vector3 right = userPoint.transform.right;
+            Vector3 up = userPoint.transform.up;
             float h = Input.GetAxis("Mouse X") * panSpeed;
             float v = Input.GetAxis("Mouse Y") * panSpeed;
-            cam.transform.Translate(-right * h, Space.World);
-            cam.transform.Translate(-up * v, Space.World);
+            userPoint.transform.Translate(-right * h, Space.World);
+            userPoint.transform.Translate(-up * v, Space.World);
         }
         if (Input.GetMouseButton(0)) // Left Mouse Button
         {
-            // Tumbling/Orbiting around "Sphere"
+            // Tumbling/Orbiting around "cameraAim"
             float h = Input.GetAxis("Mouse X") * rotationSpeed;
             float v = Input.GetAxis("Mouse Y") * rotationSpeed;
 
-            if (sphere != null)
+            if (cameraAim != null)
             {
-                // Rotate around the Sphere's position horizontally and vertically
-                cam.transform.RotateAround(sphere.transform.position, Vector3.up, h);
-                cam.transform.RotateAround(sphere.transform.position, cam.transform.right, -v);
+                // Rotate around the cameraAim's position horizontally and vertically
+                userPoint.transform.RotateAround(cameraAim.transform.position, Vector3.up, h);
+                userPoint.transform.RotateAround(cameraAim.transform.position, userPoint.transform.right, -v);
             }
         }
     }
 
     void ResetCamera()
     {
-        if (sphere != null)
+        if (cameraAim != null)
         {
-            cam.transform.position = defaultPosition; // Reset to default position
-            cam.transform.rotation = defaultRotation; // Reset to default rotation
+            userPoint.transform.position = defaultPosition; // Reset to default position
+            userPoint.transform.rotation = defaultRotation; // Reset to default rotation
         }
         Debug.Log("Camera reset to default position and rotation.");
     }
 
     void SetDefaults()
     {
-        if (sphere != null)
+        if (cameraAim != null)
         {
-            defaultPosition = cam.transform.position; // Save the initial position as default
-            defaultRotation = cam.transform.rotation; // Save the initial rotation as default
+            defaultPosition = userPoint.transform.position; // Save the initial position as default
+            defaultRotation = userPoint.transform.rotation; // Save the initial rotation as default
         }
     }
 }
