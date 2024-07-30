@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        userPoint = GameObject.Find("UserPoint"); // Find the UserPoint GameObject in the scene
+        userPoint = GameObject.Find("userPoint"); // Find the UserPoint GameObject in the scene
         cameraAim = GameObject.Find("cameraAim"); // Find the cameraAim GameObject in the scene
         SetDefaults();
     }
