@@ -1,28 +1,34 @@
-# CameraController
+# Camera Controller
 
-The CameraController is a Unity script designed to enhance 3D camera manipulation, allowing users to emulate camera control similar to what is experienced in professional 3D applications like Maya. This script supports panning, zooming, and orbiting around a designated focus point.
+This script allows for basic camera manipulation including panning, zooming, and rotating around a specified target in a Unity scene.
 
-## Features
+## Setup Instructions
 
-- **Panning:** Move the camera parallel to the viewing plane.
-- **Zooming:** Move the camera closer or further away from the focus point.
-- **Orbiting:** Rotate the camera around the focus point in both horizontal and vertical axes.
+1. **Clone the Repository:**
+   ```sh
+   git clone https://github.com/hsuehyt/CameraController.git
+   ```
 
-## Installation
+2. **Create GameObjects in the Scene:**
+   - Open your Unity project.
+   - In the Hierarchy, right-click and create two empty GameObjects.
+   - Name them exactly as follows:
+     - `userPoint`
+     - `cameraAim`
 
-To use the CameraController in your Unity project, follow these steps:
+3. **Organize Hierarchy:**
+   - Drag the `Main Camera` under `userPoint`.
 
-1. Clone or download this repository.
-2. Import the `CameraController.cs` script into your Unity project.
-3. Attach the `CameraController` script to the camera GameObject you wish to control.
-4. Set the `UserPoint` GameObject in the Unity editor to designate the focus point for camera movements.
+4. **Assign the Script:**
+   - Attach the `CameraController.cs` script to any GameObject (e.g., `userPoint`).
+   - In the Inspector, assign the `userPoint` and `cameraAim` GameObjects to their respective fields in the script.
+
+5. **Ensure Correct Naming:**
+   - Make sure the names are case-sensitive and exactly match `userPoint` and `cameraAim`.
 
 ## Usage
 
-### Key Controls
-- **Alt + Right Mouse Button:** Zoom in and out.
-- **Alt + Middle Mouse Button:** Pan the camera.
-- **Alt + Left Mouse Button:** Orbit around the `cameraAim`.
-
-### Resetting the Camera
-- **Press 'F':** Reset the camera to its default position and orientation.
+- **Pan:** Middle mouse button + mouse movement
+- **Zoom:** Right mouse button + mouse movement (up/down)
+- **Rotate:** Left mouse button + mouse movement (around `cameraAim`)
+- **Reset to Default Position:** Press `F`
