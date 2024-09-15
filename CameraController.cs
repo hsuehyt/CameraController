@@ -8,13 +8,29 @@ public class CameraController : MonoBehaviour
     public Vector3 defaultPosition;
     public Quaternion defaultRotation;
 
-    private GameObject userPoint; // Reference to the UserPoint GameObject
-    private GameObject cameraAim; // Reference to the cameraAim GameObject
+    // Updated variable names
+    [SerializeField] private GameObject POV; // Point of View
+    [SerializeField] private GameObject focalPoint; // Focal Point
+    [SerializeField] private Camera cameraObject; // Reference to the actual camera object
 
     void Start()
     {
-        userPoint = GameObject.Find("userPoint"); // Find the UserPoint GameObject in the scene
-        cameraAim = GameObject.Find("cameraAim"); // Find the cameraAim GameObject in the scene
+        // Only assign if not already set in the editor
+        if (POV == null)
+        {
+            POV = GameObject.Find("POV");
+        }
+
+        if (focalPoint == null)
+        {
+            focalPoint = GameObject.Find("Focal Point");
+        }
+
+        if (cameraObject == null)
+        {
+            cameraObject = Camera.main; // Assign the main camera if not assigned
+        }
+
         SetDefaults();
     }
 
@@ -35,51 +51,51 @@ public class CameraController : MonoBehaviour
     {
         if (Input.GetMouseButton(1)) // Right Mouse Button
         {
-            // Zooming
-            float zoomChange = Input.GetAxis("Mouse Y") * zoomSpeed;
-            userPoint.transform.Translate(0, 0, zoomChange, Space.Self);
+            // Zooming - invert the Y-axis for zoom
+            float zoomChange = -Input.GetAxis("Mouse Y") * zoomSpeed;
+            cameraObject.transform.Translate(0, 0, zoomChange, Space.Self);
         }
         if (Input.GetMouseButton(2)) // Middle Mouse Button
         {
             // Panning
-            Vector3 right = userPoint.transform.right;
-            Vector3 up = userPoint.transform.up;
+            Vector3 right = cameraObject.transform.right;
+            Vector3 up = cameraObject.transform.up;
             float h = Input.GetAxis("Mouse X") * panSpeed;
             float v = Input.GetAxis("Mouse Y") * panSpeed;
-            userPoint.transform.Translate(-right * h, Space.World);
-            userPoint.transform.Translate(-up * v, Space.World);
+            cameraObject.transform.Translate(-right * h, Space.World);
+            cameraObject.transform.Translate(-up * v, Space.World);
         }
         if (Input.GetMouseButton(0)) // Left Mouse Button
         {
-            // Tumbling/Orbiting around "cameraAim"
+            // Tumbling/Orbiting around "focalPoint"
             float h = Input.GetAxis("Mouse X") * rotationSpeed;
             float v = Input.GetAxis("Mouse Y") * rotationSpeed;
 
-            if (cameraAim != null)
+            if (focalPoint != null)
             {
-                // Rotate around the cameraAim's position horizontally and vertically
-                userPoint.transform.RotateAround(cameraAim.transform.position, Vector3.up, h);
-                userPoint.transform.RotateAround(cameraAim.transform.position, userPoint.transform.right, -v);
+                // Rotate around the focalPoint's position horizontally and vertically
+                cameraObject.transform.RotateAround(focalPoint.transform.position, Vector3.up, h);
+                cameraObject.transform.RotateAround(focalPoint.transform.position, cameraObject.transform.right, -v);
             }
         }
     }
 
     void ResetCamera()
     {
-        if (cameraAim != null)
+        if (cameraObject != null)
         {
-            userPoint.transform.position = defaultPosition; // Reset to default position
-            userPoint.transform.rotation = defaultRotation; // Reset to default rotation
+            cameraObject.transform.position = defaultPosition; // Reset to default position
+            cameraObject.transform.rotation = defaultRotation; // Reset to default rotation
         }
         Debug.Log("Camera reset to default position and rotation.");
     }
 
     void SetDefaults()
     {
-        if (cameraAim != null)
+        if (cameraObject != null)
         {
-            defaultPosition = userPoint.transform.position; // Save the initial position as default
-            defaultRotation = userPoint.transform.rotation; // Save the initial rotation as default
+            defaultPosition = cameraObject.transform.position; // Save the initial position as default
+            defaultRotation = cameraObject.transform.rotation; // Save the initial rotation as default
         }
     }
 }
