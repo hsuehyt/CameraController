@@ -3,37 +3,38 @@ using UnityEngine.InputSystem; // New Input System
 
 public class CameraController : MonoBehaviour
 {
-    [Header("Speeds")]
-    public float panSpeed = 0.5f;
-    public float zoomSpeed = 0.2f;   // smoother zoom control
-    public float rotationSpeed = 5f;
+    [Header("Speeds (tuned to feel like Scene View)")]
+    public float panSpeed = 0.0001f;      // Adjusted for pixel delta sensitivity
+    public float zoomSpeed = 0.05f;      // Scroll/drag zoom sensitivity
+    public float rotationSpeed = 0.2f;   // Orbit sensitivity (degrees per pixel)
 
     [Header("Defaults (auto-filled on Start)")]
     public Vector3 defaultPosition;
     public Quaternion defaultRotation;
 
     [Header("Scene References")]
-    [SerializeField] private GameObject POV;          // Point of View (optional helper)
-    [SerializeField] private GameObject focalPoint;   // Orbit target
-    [SerializeField] private Camera cameraObject;     // Actual camera
+    [SerializeField] private GameObject POV;
+    [SerializeField] private GameObject focalPoint;
+    [SerializeField] private Camera cameraObject;
 
-    // --- New Input System actions ---
+    // Input Actions
     private InputAction altKey;
-    private InputAction resetKey;       // 'F' to reset
-    private InputAction mouseDelta;     // <Mouse>/delta
+    private InputAction resetKey;
+    private InputAction mouseDelta;
     private InputAction mouseLeft;
     private InputAction mouseMiddle;
     private InputAction mouseRight;
+    private InputAction scroll;
 
     void Awake()
     {
-        // Define actions with sensible default bindings
-        altKey       = new InputAction("Alt",       binding: "<Keyboard>/leftAlt");
-        resetKey     = new InputAction("Reset",     binding: "<Keyboard>/f");
-        mouseDelta   = new InputAction("MouseDrag", binding: "<Mouse>/delta");
-        mouseLeft    = new InputAction("LMB",       binding: "<Mouse>/leftButton");
-        mouseMiddle  = new InputAction("MMB",       binding: "<Mouse>/middleButton");
-        mouseRight   = new InputAction("RMB",       binding: "<Mouse>/rightButton");
+        altKey = new InputAction("Alt", binding: "<Keyboard>/leftAlt");
+        resetKey = new InputAction("Reset", binding: "<Keyboard>/f");
+        mouseDelta = new InputAction("MouseDrag", binding: "<Mouse>/delta");
+        mouseLeft = new InputAction("LMB", binding: "<Mouse>/leftButton");
+        mouseMiddle = new InputAction("MMB", binding: "<Mouse>/middleButton");
+        mouseRight = new InputAction("RMB", binding: "<Mouse>/rightButton");
+        scroll = new InputAction("Scroll", binding: "<Mouse>/scroll");
     }
 
     void OnEnable()
@@ -44,6 +45,7 @@ public class CameraController : MonoBehaviour
         mouseLeft.Enable();
         mouseMiddle.Enable();
         mouseRight.Enable();
+        scroll.Enable();
     }
 
     void OnDisable()
@@ -54,15 +56,14 @@ public class CameraController : MonoBehaviour
         mouseLeft.Disable();
         mouseMiddle.Disable();
         mouseRight.Disable();
+        scroll.Disable();
     }
 
     void Start()
     {
-        // Find references if not set in Inspector
-        if (POV == null)       POV = GameObject.Find("POV");
+        if (POV == null) POV = GameObject.Find("POV");
         if (focalPoint == null) focalPoint = GameObject.Find("Focal Point");
         if (cameraObject == null) cameraObject = Camera.main;
-
         SetDefaults();
     }
 
@@ -77,44 +78,54 @@ public class CameraController : MonoBehaviour
         {
             ResetCamera();
         }
+
+        HandleScrollZoom();
     }
 
     void HandleMouseInput()
     {
         if (cameraObject == null) return;
 
-        // Mouse delta each frame (pixels moved since last frame)
         Vector2 delta = mouseDelta.ReadValue<Vector2>();
 
-        // Right Mouse Button: Zoom (invert Y like original)
+        // RMB: smooth zoom drag
         if (mouseRight.IsPressed())
         {
             float zoomChange = -delta.y * zoomSpeed;
             cameraObject.transform.Translate(0f, 0f, zoomChange, Space.Self);
         }
 
-        // Middle Mouse Button: Pan
+        // MMB: pan
         if (mouseMiddle.IsPressed())
         {
             Vector3 right = cameraObject.transform.right;
-            Vector3 up    = cameraObject.transform.up;
-            float h = delta.x * panSpeed;
-            float v = delta.y * panSpeed;
-
+            Vector3 up = cameraObject.transform.up;
+            float h = delta.x * panSpeed * cameraObject.transform.position.magnitude * 10f;
+            float v = delta.y * panSpeed * cameraObject.transform.position.magnitude * 10f;
             cameraObject.transform.Translate(-right * h, Space.World);
-            cameraObject.transform.Translate(-up * v,   Space.World);
+            cameraObject.transform.Translate(-up * v, Space.World);
         }
 
-        // Left Mouse Button: Orbit around focalPoint
+        // LMB: orbit
         if (mouseLeft.IsPressed() && focalPoint != null)
         {
             float h = delta.x * rotationSpeed;
             float v = delta.y * rotationSpeed;
 
-            // Horizontal orbit around world up
             cameraObject.transform.RotateAround(focalPoint.transform.position, Vector3.up, h);
-            // Vertical orbit around camera right (invert like original)
             cameraObject.transform.RotateAround(focalPoint.transform.position, cameraObject.transform.right, -v);
+        }
+    }
+
+    void HandleScrollZoom()
+    {
+        if (cameraObject == null) return;
+
+        Vector2 scrollValue = scroll.ReadValue<Vector2>();
+        if (Mathf.Abs(scrollValue.y) > 0.01f)
+        {
+            float scrollZoom = scrollValue.y * zoomSpeed * 10f;
+            cameraObject.transform.Translate(0f, 0f, scrollZoom, Space.Self);
         }
     }
 
