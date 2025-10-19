@@ -13,7 +13,6 @@ public class CameraController : MonoBehaviour
     public Quaternion defaultRotation;
 
     [Header("Scene References")]
-    [SerializeField] private GameObject POV;
     [SerializeField] private GameObject focalPoint;
     [SerializeField] private Camera cameraObject;
 
@@ -61,7 +60,6 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        if (POV == null) POV = GameObject.Find("POV");
         if (focalPoint == null) focalPoint = GameObject.Find("Focal Point");
         if (cameraObject == null) cameraObject = Camera.main;
         SetDefaults();
