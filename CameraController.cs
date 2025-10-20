@@ -25,6 +25,10 @@ public class CameraController : MonoBehaviour
     private InputAction mouseRight;
     private InputAction scroll;
 
+    // ---------- NEW: public accessors ----------
+    public GameObject GetFocalPoint() => focalPoint;
+    public void SetFocalPoint(GameObject go) => focalPoint = go;
+
     void Awake()
     {
         altKey = new InputAction("Alt", binding: "<Keyboard>/leftAlt");
